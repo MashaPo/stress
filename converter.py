@@ -17,13 +17,11 @@ def GiveMeText(txt_file):
     text = txt_file.read()
     txt_file.close()
     return(text)
-
 #ф-ция пишет в файл элементы списка
 def ListToFile(txt_file, stressed_vowel_position):
     txt_file = open(txt_file, 'w', encoding = 'utf-8')
     txt_file.write(str(stressed_vowel_position).replace(" ","")[1:-1])
     txt_file.close()
-
 
 #ф-ция делает список списков из разметки тритона
 def TreetonToList(treeton_str):
@@ -69,24 +67,3 @@ def main ():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
