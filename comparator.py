@@ -16,28 +16,12 @@ def ResultAccToList(file_name):
     return(accent_list)
 
 def ComparingLists(corp_list, acc_list):
-    corp_index = 0
-    acc_index = 0
-    TP = 0
-    FP = 0
-    FN = 0
-    while corp_index  + 1 < len(corp_list) or acc_index  + 1 < len(acc_list):
-        if corp_list[corp_index] == acc_list[acc_index]:
-            #print(str(corp_list[corp_index])+ ' equals ' + str(acc_list[acc_index]))
-            TP += 1
-            if corp_index + 1 < len(corp_list): corp_index += 1
-            if acc_index + 1 < len(acc_list): acc_index += 1
-        elif corp_list[corp_index] < acc_list[acc_index]:
-            #print(str(corp_list[corp_index])+ ' is lower then ' + str(acc_list[acc_index]))
-            FN += 1
-            if corp_index + 1 < len(corp_list): corp_index += 1
-            else:   acc_index += 1
-        else:
-            #print(str(corp_list[corp_index])+ ' is bigger then ' + str(acc_list[acc_index]))
-            FP += 1
-            if acc_index + 1 < len(acc_list): acc_index += 1
-            else:   corp_index += 1
-        #print('TP: ' + str(TP) +' FN: ' + str(FN) + ' FP: ' + str(FP))
+    corp_set = set(corp_list)
+    acc_set = set(acc_list)
+    TP = len(corp_set & acc_set)
+    FN = len(corp_set - acc_set)
+    FP = len(acc_set - corp_set)
+    
     return(TP,FN,FP)
 
 def QualityMeasure(TP,FN,FP):
@@ -72,6 +56,13 @@ def main():
     file.write("\tf_measure:\t\t"+(str(treeton_result[2])) + "\n")
     file.write("\taccent_count:\t"+str(len(treeton_list)) + "\n")
     file.write("Корпус:\n\taccent_count:\t" +  str(len(corpora_list)) + '\n')
+    nash_list = ResultAccToList( 'raz.txt.sstr')
+    n_TP,n_FN,n_FP = ComparingLists(corpora_list, nash_list)
+    nash_result = QualityMeasure(n_TP,n_FN,n_FP)
+    file.write("Кирилл:\n" + "\tprecision:\t\t"+(str(nash_result[0])) + "\n")
+    file.write("\trecall:\t\t\t"+(str(nash_result[1])) + "\n")
+    file.write("\tf_measure:\t\t"+(str(nash_result[2])) + "\n")
+    file.write("\taccent_count:\t"+str(len(nash_list)) + "\n")
 
     file.close()
     
